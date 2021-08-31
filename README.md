@@ -1,2 +1,2 @@
 # zetta09
-Another clone of zetta
+Another clone of zetta.
