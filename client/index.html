@@ -7,14 +7,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zetta</title>
     <script src="socket.io/socket.io.js"></script>
+    <style>
+        * {
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            outline: 0px;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .inp {
+            border: 1px solid black;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 4px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+
+        .button {
+            border: 1px solid black;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        .blue {
+            background: #7769fa;
+            color: #ffffff;
+        }
+
+        .container {
+            /*display: grid;*/
+            position: absolute;
+            width: 100%;
+        }
+
+        .label {
+            background: #cfcfcf;
+            border: 1px solid #000000;
+            padding: 8px;
+            margin-right: -7px;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        h3 {
+            font-size: 1em;
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="canvas"></canvas>
+    <div id="login_area">
+        <h2>Login</h2>
+        <label for="login_username" class="label">👤 </label><input type="text" id="login_username" class="inp"
+            placeholder="Username"><br>
+        <label for="login_password" class="label">🔑</label><input type="password" id="login_password" class="inp"
+            placeholder="Password"><br>
+        <button id="do_login" class="button blue">Login</button>
+        <button id="goto_register" class="button blue">Register </button>
+    </div>
+    <div id="register_area" class="hidden">
+        <h2>Register</h2>
+        <label for="register_username" class="label">👤 </label><input type="text" id="register_username" class="inp"
+            placeholder="Username"><br>
+        <label for="register_email" class="label">📧</label><input type="email" id="register_email" class="inp"
+            placeholder="Email"><br>
+        <label for="register_password" class="label">🔑</label><input type="password" id="register_password" class="inp"
+            placeholder="Password"><br>
+        <label for="confirm_password" class="label">🔑</label><input type="password" id="confirm_password" class="inp"
+            placeholder="Confirm Password"><br>
+        <button id="do_register" class="button blue">Register</button>
+        <button id="goto_login" class="button blue">Login</button>
+    </div>
+    <div id="game_area" class="hidden">
+        <canvas id="canvas"></canvas>
+    </div>
     <script>
         (() => {
             const socket = io()
-
+            goto_register.addEventListener("click", () => {
+                login_area.style.display = "none"
+                register_area.style.display = "block"
+            })
+            goto_login.addEventListener("click", () => {
+                register_area.style.display = "none"
+                login_area.style.display = "block"
+            })
         })()
     </script>
 </body>
