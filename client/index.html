@@ -29,6 +29,7 @@
         }
 
         .button {
+            position: relative;
             border: 1px solid black;
             padding: 8px;
             border-radius: 4px;
@@ -39,6 +40,21 @@
         .blue {
             background: #7769fa;
             color: #ffffff;
+        }
+
+        .green {
+            background: #00be56;
+            color: #ffffff;
+        }
+
+        .red {
+            background: #e42f2f;
+            color: #ffffff;
+        }
+
+        .orange {
+            background: #ff934b;
+            color: #000000;
         }
 
         .container {
@@ -55,6 +71,14 @@
             border-radius: 4px;
         }
 
+        .message {
+            border: 1px solid black;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 8px;
+        }
+
         h1 {
             font-size: 2em;
         }
@@ -66,21 +90,69 @@
         h3 {
             font-size: 1em;
         }
+
+        .close {
+            right: 20px;
+            float: right;
+            border: 1px solid black;
+            border-radius: 4px;
+            background: #ff0000;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: -30px;
+        }
+        
+        .button--loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid #555555;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            box-shadow: inset 0px 0px 20px 0px #8effea, 0px 0px 20px 10px #8effea;
+        }
+
+        @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+
+            to {
+                transform: rotate(1turn);
+            }
+        }
     </style>
 </head>
 
 <body>
     <div id="login_area">
+        <img src="zetta.svg" alt="Zetta" class="logo">
         <h2>Login</h2>
+        <div class="message hidden"><span class="message_text"></span><button class="close">✖</button></div>
         <label for="login_username" class="label">👤 </label><input type="text" id="login_username" class="inp"
             placeholder="Username"><br>
         <label for="login_password" class="label">🔑</label><input type="password" id="login_password" class="inp"
             placeholder="Password"><br>
         <button id="do_login" class="button blue">Login</button>
         <button id="goto_register" class="button blue">Register </button>
+        <hr>
+        © Copyright Zetta 2021 by 👨🏻‍💻Yarkqub
     </div>
     <div id="register_area" class="hidden">
+        <img src="zetta.svg" alt="Zetta" class="logo">
         <h2>Register</h2>
+        <div class="message hidden"><span class="message_text"></span><button class="close">✖</button></div>
         <label for="register_username" class="label">👤 </label><input type="text" id="register_username" class="inp"
             placeholder="Username"><br>
         <label for="register_email" class="label">📧</label><input type="email" id="register_email" class="inp"
@@ -91,6 +163,8 @@
             placeholder="Confirm Password"><br>
         <button id="do_register" class="button blue">Register</button>
         <button id="goto_login" class="button blue">Login</button>
+        <hr>
+        © Copyright Zetta 2021 by 👨🏻‍💻Yarkqub
     </div>
     <div id="game_area" class="hidden">
         <canvas id="canvas"></canvas>
@@ -98,6 +172,49 @@
     <script>
         (() => {
             const socket = io()
+            const message_text = document.querySelectorAll(".message_text")
+            const message = document.querySelectorAll(".message")
+            let message_color = "";
+            const alert_message = (color, msg_text) => {
+                let old_color = message_color
+                message_color = color
+                message.forEach(msg => {
+                    if (old_color) {
+                        msg.classList.remove(old_color)
+                    }
+                    msg.style.display = "block"
+                    msg.classList.add(message_color)
+                })
+                message_text.forEach(msg => {
+                    msg.innerHTML = msg_text
+                })
+            }
+            const register = () => {
+                do_register.classList.add("button--loading")
+                if (register_username.value && register_email.value && register_password.value && confirm_password.value) {
+                    if (register_password.value == confirm_password.value) {
+                        socket.emit("register", { username: register_username.value, email: register_email.value, password: register_password.value })
+                    }
+                    else {
+                        alert_message("orange", "⚠ Confirm password not match")
+                        do_register.classList.remove("button--loading")
+                    }
+                }
+                else {
+                    alert_message("orange", "⚠ Please fill all form")
+                    do_register.classList.remove("button--loading")
+                }
+            }
+            const login = () => {
+                do_login.classList.add("button--loading")
+                if (login_username.value && login_password.value) {
+                    socket.emit("login", { username: login_username.value, password: login_password.value })
+                }
+                else {
+                    alert_message("orange", "⚠ Please fill all form")
+                    do_login.classList.remove("button--loading")
+                }
+            }
             goto_register.addEventListener("click", () => {
                 login_area.style.display = "none"
                 register_area.style.display = "block"
@@ -105,6 +222,19 @@
             goto_login.addEventListener("click", () => {
                 register_area.style.display = "none"
                 login_area.style.display = "block"
+            })
+            do_register.addEventListener("click", () => {
+                register()
+            })
+            do_login.addEventListener("click", () => {
+                login()
+            })
+            const close = document.querySelectorAll(".close")
+            close.forEach(e => {
+                e.addEventListener("click", el => {
+                    message.forEach(msg => { msg.style.display = "none" })
+                    e.parentElement.classList.remove(message_color)
+                })
             })
         })()
     </script>
