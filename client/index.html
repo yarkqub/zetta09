@@ -105,7 +105,7 @@
             width: 150px;
             margin-bottom: -30px;
         }
-        
+
         .button--loading::after {
             content: "";
             position: absolute;
@@ -174,7 +174,14 @@
             const socket = io()
             const message_text = document.querySelectorAll(".message_text")
             const message = document.querySelectorAll(".message")
-            let message_color = "";
+            let ipAddress
+            fetch("https://geoip-db.com/json/").then(data => {
+                return data.json()
+            }).then(data1 => {
+                ipAddress = data1["IPv4"]
+            })
+
+            let message_color = ""
             const alert_message = (color, msg_text) => {
                 let old_color = message_color
                 message_color = color
@@ -193,7 +200,7 @@
                 do_register.classList.add("button--loading")
                 if (register_username.value && register_email.value && register_password.value && confirm_password.value) {
                     if (register_password.value == confirm_password.value) {
-                        socket.emit("register", { username: register_username.value, email: register_email.value, password: register_password.value })
+                        socket.emit("register", { username: register_username.value, email: register_email.value, password: register_password.value, ip: ipAddress })
                     }
                     else {
                         alert_message("orange", "⚠ Confirm password not match")
@@ -235,6 +242,12 @@
                     message.forEach(msg => { msg.style.display = "none" })
                     e.parentElement.classList.remove(message_color)
                 })
+            })
+
+            socket.on("message", data => {
+                alert_message(data.color, data.msg)
+                do_login.classList.remove("button--loading")
+                do_register.classList.remove("button--loading")
             })
         })()
     </script>
