@@ -175,7 +175,7 @@
             const message_text = document.querySelectorAll(".message_text")
             const message = document.querySelectorAll(".message")
             let ipAddress
-            fetch("https://geoip-db.com/json/").then(data => {
+            fetch("https://geolocation-db.com/json/").then(data => {
                 return data.json()
             }).then(data1 => {
                 ipAddress = data1["IPv4"]
