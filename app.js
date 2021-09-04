@@ -38,11 +38,26 @@ io.on("connection", socket => {
         else {
             socket.emit("message", { color: "red", msg: "Special Character are not allowed" })
         }
-        //Output { username, email, password }
     })
     socket.on("login", data => {
-        console.log(data)
-        //Output {username, password}
+        const check1 = db.prepare("SELECT COUNT(*) FROM users WHERE username = ? COLLATE NOCASE").get(data.username)
+        if (check1["COUNT(*)"]) {
+            const user = db.prepare("SELECT * FROM users WHERE username = ? COLLATE NOCASE").get(data.username)
+            bcrypt.compare(data.password, user.password, function (err, result) {
+                if (result) {
+                    const timenow = new Date()
+                    const gettime = Math.floor(timenow.getTime() / 1000)
+                    db.prepare("UPDATE users SET last_online = ?, ip_last = ? WHERE id = ?").run(gettime, data.ip, user.id)
+                    socket.emit("login", user)
+                }
+                else {
+                    socket.emit("message", { color: "red", msg: "Password not match" })
+                }
+            });
+        }
+        else {
+            socket.emit("message", { color: "red", msg: "Username not found" })
+        }
     })
 
     socket.on("disconnect", () => {

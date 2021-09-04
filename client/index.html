@@ -166,6 +166,16 @@
         <hr>
         © Copyright Zetta 2021 by 👨🏻‍💻Yarkqub
     </div>
+    <div class="hidden" id="loggedin_area">
+        <img src="zetta.svg" alt="Zetta" class="logo">
+        <p>Welcome to 🎮zetta~! <span class="username">{username}</span></p>
+        <button class="button green enter">🕹 Enter Game</button>
+        <button class="button red logout">📴 Logout</button><br>
+        account_created: {account_created} <br>
+        last_online: {last_online} <br>
+        <hr>
+        © Copyright Zetta 2021 by 👨🏻‍💻Yarkqub
+    </div>
     <div id="game_area" class="hidden">
         <canvas id="canvas"></canvas>
     </div>
@@ -215,7 +225,7 @@
             const login = () => {
                 do_login.classList.add("button--loading")
                 if (login_username.value && login_password.value) {
-                    socket.emit("login", { username: login_username.value, password: login_password.value })
+                    socket.emit("login", { username: login_username.value, password: login_password.value, ip: ipAddress })
                 }
                 else {
                     alert_message("orange", "⚠ Please fill all form")
@@ -241,6 +251,30 @@
                 e.addEventListener("click", el => {
                     message.forEach(msg => { msg.style.display = "none" })
                     e.parentElement.classList.remove(message_color)
+                })
+            })
+            const logout = document.querySelectorAll(".logout")
+            logout.forEach(lgout => {
+                lgout.addEventListener("click", () => {
+                    loggedin_area.style.display = "none"
+                    login_area.style.display = "block"
+                })
+            })
+            const enter = document.querySelectorAll(".enter")
+            enter.forEach(entr => {
+                entr.addEventListener("click", () => {
+                    loggedin_area.style.display = "none"
+                    game_area.style.display = "block"
+                })
+            })
+
+            socket.on("login", data => {
+                do_login.classList.remove("button--loading")
+                login_area.style.display = "none"
+                loggedin_area.style.display = "block"
+                const username = document.querySelectorAll(".username")
+                username.forEach(unme => {
+                    unme.innerHTML = data.username
                 })
             })
 
