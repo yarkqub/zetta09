@@ -184,12 +184,6 @@
             const socket = io()
             const message_text = document.querySelectorAll(".message_text")
             const message = document.querySelectorAll(".message")
-            let ipAddress
-            fetch("https://geolocation-db.com/json/").then(data => {
-                return data.json()
-            }).then(data1 => {
-                ipAddress = data1["IPv4"]
-            })
 
             let message_color = ""
             const alert_message = (color, msg_text) => {
@@ -210,7 +204,7 @@
                 do_register.classList.add("button--loading")
                 if (register_username.value && register_email.value && register_password.value && confirm_password.value) {
                     if (register_password.value == confirm_password.value) {
-                        socket.emit("register", { username: register_username.value, email: register_email.value, password: register_password.value, ip: ipAddress })
+                        socket.emit("register", { username: register_username.value, email: register_email.value, password: register_password.value })
                     }
                     else {
                         alert_message("orange", "⚠ Confirm password not match")
@@ -225,7 +219,7 @@
             const login = () => {
                 do_login.classList.add("button--loading")
                 if (login_username.value && login_password.value) {
-                    socket.emit("login", { username: login_username.value, password: login_password.value, ip: ipAddress })
+                    socket.emit("login", { username: login_username.value, password: login_password.value })
                 }
                 else {
                     alert_message("orange", "⚠ Please fill all form")

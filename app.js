@@ -9,6 +9,11 @@ const saltRounds = 10
 app.use('/', express.static(__dirname + "/client"))
 
 io.on("connection", socket => {
+    let ip = "127.0.0.1"
+    const get_ip = socket.request.connection.remoteAddress.split("::ffff:")[1]
+    if (get_ip) {
+        ip = get_ip
+    }
     socket.on("register", data => {
         if (/^[a-zA-Z0-9]+$/.test(data.username)) {
             if (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(data.email).toLowerCase())) {
@@ -25,7 +30,7 @@ io.on("connection", socket => {
                         bcrypt.hash(data.password, saltRounds, function (err, hash) {
                             const timenow = new Date()
                             const gettime = Math.floor(timenow.getTime() / 1000)
-                            db.prepare("INSERT INTO users (username, mail, password, credits, account_created, ip_last, ip_reg, home_room) VALUES (?, ?, ?, ?, ?, ?, ?, ?)").run(data.username, data.email, hash, 5000, gettime, data.ip, data.ip, 1)
+                            db.prepare("INSERT INTO users (username, mail, password, credits, account_created, ip_last, ip_reg, home_room) VALUES (?, ?, ?, ?, ?, ?, ?, ?)").run(data.username, data.email, hash, 5000, gettime, ip, ip, 1)
                             socket.emit("message", { color: "green", msg: "Account created, login to continue" })
                         })
                     }
@@ -47,7 +52,7 @@ io.on("connection", socket => {
                 if (result) {
                     const timenow = new Date()
                     const gettime = Math.floor(timenow.getTime() / 1000)
-                    db.prepare("UPDATE users SET last_online = ?, ip_last = ? WHERE id = ?").run(gettime, data.ip, user.id)
+                    db.prepare("UPDATE users SET last_online = ?, ip_last = ? WHERE id = ?").run(gettime, ip, user.id)
                     socket.emit("login", user)
                 }
                 else {
