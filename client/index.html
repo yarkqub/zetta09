@@ -259,6 +259,7 @@
                 entr.addEventListener("click", () => {
                     loggedin_area.style.display = "none"
                     game_area.style.display = "block"
+                    socket.emit("enter")
                 })
             })
 
