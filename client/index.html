@@ -310,6 +310,16 @@
                     debug1++
                     console.log(data)
                 }
+                ctx.fillStyle = "#FF0000"
+                const adj_x_door = ref_x + (data.room_model.door_x * tile_half) - (data.room_model.door_y * tile_half)
+                const adj_y_door = ref_y + (data.room_model.door_y * tile_hlf) + (data.room_model.door_x * tile_hlf)
+                ctx.beginPath()
+                ctx.moveTo(adj_x_door, adj_y_door - tile_hlf)
+                ctx.lineTo(adj_x_door + tile_half, adj_y_door)
+                ctx.lineTo(adj_x_door, adj_y_door + tile_hlf)
+                ctx.lineTo(adj_x_door - tile_half, adj_y_door)
+                ctx.closePath()
+                ctx.fill()
                 ctx.fillStyle = "#00FF00"
                 const room_model1 = data.room_model.heightmap.split("\r\n")
                 for (let y = 0; y < room_model1.length; y++) {
@@ -317,11 +327,13 @@
                     for (let x = 0; x < room_model2.length; x++) {
                         if (room_model2[x] > -1) {
                             //floor
+                            const adj_x = ref_x + (x * tile_half) - (y * tile_half)
+                            const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
                             ctx.beginPath()
-                            ctx.moveTo(ref_x + (x * tile_half) - (y * tile_half), ref_y + (y * tile_hlf) + (x * tile_hlf) - tile_hlf)
-                            ctx.lineTo(ref_x + (x * tile_half) - (y * tile_half) + tile_half, ref_y + (y * tile_hlf) + (x * tile_hlf))
-                            ctx.lineTo(ref_x + (x * tile_half) - (y * tile_half), ref_y + (y * tile_hlf) + (x * tile_hlf) + tile_hlf)
-                            ctx.lineTo(ref_x + (x * tile_half) - (y * tile_half) - tile_half, ref_y + (y * tile_hlf) + (x * tile_hlf))
+                            ctx.moveTo(adj_x, adj_y - tile_hlf)
+                            ctx.lineTo(adj_x + tile_half, adj_y)
+                            ctx.lineTo(adj_x, adj_y + tile_hlf)
+                            ctx.lineTo(adj_x - tile_half, adj_y)
                             ctx.closePath()
                             ctx.fill()
                         }
@@ -330,6 +342,7 @@
                         }
                     }
                 }
+
             })
 
             socket.on("message", data => {
