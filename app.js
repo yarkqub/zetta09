@@ -68,7 +68,6 @@ io.on("connection", socket => {
         }
     })
     socket.on("enter", () => {
-        //get room info
         const user = db.prepare("SELECT * FROM users WHERE id = ?").get(socket.uid)
         socket.room = user.home_room
         const room = db.prepare("SELECT * FROM rooms WHERE id = ?").get(user.home_room)
@@ -83,6 +82,7 @@ io.on("connection", socket => {
         }
         const rm = rooms.find(rm => rm.room.id == room.id)
         rm.players.push(user)
+        socket.join(socket.room)
     })
 
     socket.on("disconnect", () => {
@@ -109,5 +109,7 @@ http.listen(8080, () => {
 })
 
 setInterval(() => {
-    //nothing to do
+    rooms.forEach(room => {
+        io.in(room.room.id).emit("game", room)
+    })
 }, 1000 / 60)

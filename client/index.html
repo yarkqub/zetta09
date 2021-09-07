@@ -184,6 +184,17 @@
             const socket = io()
             const message_text = document.querySelectorAll(".message_text")
             const message = document.querySelectorAll(".message")
+            const ctx = canvas.getContext("2d")
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight
+            const tile_size = 64
+            const tile_half = tile_size / 2
+            const tile_hlf = tile_size / 4
+            let ref_x = 200
+            let ref_y = 0
+            let hold_x = 0
+            let hold_y = 0
+            let mousedown = false
 
             let message_color = ""
             const alert_message = (color, msg_text) => {
@@ -226,6 +237,23 @@
                     do_login.classList.remove("button--loading")
                 }
             }
+
+            canvas.addEventListener("mousedown", e => {
+                mousedown = true
+                hold_x = e.clientX
+                hold_y = e.clientY
+            })
+            canvas.addEventListener("mouseup", () => {
+                mousedown = false
+            })
+            canvas.addEventListener("mousemove", e => {
+                if (mousedown) {
+                    ref_x += e.clientX - hold_x
+                    ref_y += e.clientY - hold_y
+                    hold_x = e.clientX
+                    hold_y = e.clientY
+                }
+            })
             goto_register.addEventListener("click", () => {
                 login_area.style.display = "none"
                 register_area.style.display = "block"
@@ -260,6 +288,8 @@
                     loggedin_area.style.display = "none"
                     game_area.style.display = "block"
                     socket.emit("enter")
+                    const bdy = document.querySelector("body")
+                    bdy.style.margin = "0px"
                 })
             })
 
@@ -271,6 +301,35 @@
                 username.forEach(unme => {
                     unme.innerHTML = data.username
                 })
+            })
+            let debug1 = 0
+            socket.on("game", data => {
+                ctx.fillStyle = "#000000"
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                if (!debug1) {
+                    debug1++
+                    console.log(data)
+                }
+                ctx.fillStyle = "#00FF00"
+                const room_model1 = data.room_model.heightmap.split("\r\n")
+                for (let y = 0; y < room_model1.length; y++) {
+                    const room_model2 = room_model1[y].split("")
+                    for (let x = 0; x < room_model2.length; x++) {
+                        if (room_model2[x] > -1) {
+                            //floor
+                            ctx.beginPath()
+                            ctx.moveTo(ref_x + (x * tile_half) - (y * tile_half), ref_y + (y * tile_hlf) + (x * tile_hlf) - tile_hlf)
+                            ctx.lineTo(ref_x + (x * tile_half) - (y * tile_half) + tile_half, ref_y + (y * tile_hlf) + (x * tile_hlf))
+                            ctx.lineTo(ref_x + (x * tile_half) - (y * tile_half), ref_y + (y * tile_hlf) + (x * tile_hlf) + tile_hlf)
+                            ctx.lineTo(ref_x + (x * tile_half) - (y * tile_half) - tile_half, ref_y + (y * tile_hlf) + (x * tile_hlf))
+                            ctx.closePath()
+                            ctx.fill()
+                        }
+                        else {
+                            //wall
+                        }
+                    }
+                }
             })
 
             socket.on("message", data => {
