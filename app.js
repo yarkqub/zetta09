@@ -112,4 +112,4 @@ setInterval(() => {
     rooms.forEach(room => {
         io.in(room.room.id).emit("game", room)
     })
-}, 1000 / 60)
+}, 1000 / 30)

@@ -197,6 +197,8 @@
             let mousedown = false
             let tiles = []
             let tile_update = true
+            let cur_x = 0
+            let cur_y = 0
 
 
             let message_color = ""
@@ -248,7 +250,6 @@
             })
             canvas.addEventListener("mouseup", () => {
                 mousedown = false
-                tiles = []
             })
             canvas.addEventListener("mousemove", e => {
                 if (mousedown) {
@@ -262,9 +263,15 @@
                         til.active = false
                         if (ctx.isPointInPath(til.path, e.clientX, e.clientY)) {
                             til.active = true
+                            if (til.x != cur_x || til.y != cur_y) {
+                                cur_x = til.x
+                                cur_y = til.y
+                                tiles = []
+                                tile_update = true
+                            }
                         }
                     })
-                    tile_update = true
+
                 }
             })
             goto_register.addEventListener("click", () => {
@@ -319,10 +326,12 @@
             socket.on("game", data => {
                 ctx.fillStyle = "#000000"
                 ctx.fillRect(0, 0, canvas.width, canvas.height)
-                if (!debug1) {
-                    debug1++
-                    console.log(data)
-                }
+                //if (!debug1) {
+                debug1++
+                //console.log(data)
+                ctx.fillStyle = "#FFFFFF"
+                ctx.fillText(debug1, 20, 20)
+                //s}
                 ctx.fillStyle = "#FF0000"
                 const adj_x_door = ref_x + (data.room_model.door_x * tile_half) - (data.room_model.door_y * tile_half)
                 const adj_y_door = ref_y + (data.room_model.door_y * tile_hlf) + (data.room_model.door_x * tile_hlf)
@@ -349,6 +358,7 @@
                             ctx.lineTo(adj_x - tile_half, adj_y)
                             ctx.closePath()
                             ctx.fill()
+                            
                             if (tile_update) {
                                 tiles.push({ path: new Path2D(), x: x, y: y, active: false })
                                 tiles[tiles.length - 1].path.moveTo(adj_x, adj_y - tile_hlf)
@@ -366,9 +376,11 @@
                 tile_update = false
                 //draw cursor
                 const cursor = tiles.find(til => til.active)
-                ctx.strokeStyle = "#FFFFFF"
-                ctx.lineWidth = 3
-                ctx.stroke(cursor.path)
+                if (cursor) {
+                    ctx.strokeStyle = "#FFFFFF"
+                    ctx.lineWidth = 3.8
+                    ctx.stroke(cursor.path)
+                }
 
 
             })
