@@ -342,7 +342,9 @@
                     for (let x = 0; x < room_model2.length; x++) {
                         if (room_model2[x] > -1) {
                             //floor
-                            ctx.fillStyle = "#00FF00"
+                            ctx.lineWidth = 1
+                            ctx.fillStyle = "#989865"
+                            ctx.strokeStyle = "#8E8E5E"
                             const adj_x = ref_x + (x * tile_half) - (y * tile_half)
                             const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
                             ctx.beginPath()
@@ -352,8 +354,9 @@
                             ctx.lineTo(adj_x - tile_half, adj_y)
                             ctx.closePath()
                             ctx.fill()
+                            ctx.stroke()
 
-                            ctx.fillStyle = "#FF00FF"
+                            ctx.fillStyle = "#797950"
                             ctx.beginPath()
                             ctx.moveTo(adj_x - tile_half, adj_y)
                             ctx.lineTo(adj_x, adj_y + tile_hlf)
@@ -362,7 +365,6 @@
                             ctx.closePath()
                             ctx.fill()
 
-                            ctx.fillStyle = "#0000FF"
                             ctx.beginPath()
                             ctx.moveTo(adj_x, adj_y + tile_hlf)
                             ctx.lineTo(adj_x + tile_half, adj_y)
@@ -389,12 +391,30 @@
                                         const adj_x = ref_x + (x * tile_half) - (y * tile_half)
                                         const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
 
-                                        ctx.fillStyle = "#00FFFF"
+                                        ctx.fillStyle = "#BBBECD"
                                         ctx.beginPath()
-                                        ctx.moveTo(adj_x, adj_y + tile_hlf)
-                                        ctx.lineTo(adj_x + tile_half, adj_y + tile_hlf)
-                                        ctx.lineTo(adj_x + tile_half, adj_y - tile_hlf - (tile_half * 3))
+                                        ctx.moveTo(adj_x, adj_y + tile_hlf + (tile_size / 10))
+                                        ctx.lineTo(adj_x - (tile_size / 10), adj_y + tile_hlf + (tile_size / 10) - 4)
+                                        ctx.lineTo(adj_x - (tile_size / 10), adj_y - (tile_half * 3) - 4)
                                         ctx.lineTo(adj_x, adj_y - (tile_half * 3))
+                                        ctx.closePath()
+                                        ctx.fill()
+
+                                        ctx.fillStyle = "#6F717A"
+                                        ctx.beginPath()
+                                        ctx.moveTo(adj_x, adj_y - (tile_half * 3))
+                                        ctx.lineTo(adj_x - (tile_size / 10), adj_y - (tile_half * 3) - 4)
+                                        ctx.lineTo(adj_x + tile_half - (tile_size / 10), adj_y - (tile_half * 3) - tile_hlf - 4)
+                                        ctx.lineTo(adj_x + tile_half, adj_y - (tile_half * 3) - tile_hlf)
+                                        ctx.closePath()
+                                        ctx.fill()
+
+                                        ctx.fillStyle = "#90929E"
+                                        ctx.beginPath()
+                                        ctx.moveTo(adj_x, adj_y - (tile_half * 3))
+                                        ctx.lineTo(adj_x + tile_half, adj_y - (tile_half * 3) - tile_hlf)
+                                        ctx.lineTo(adj_x + tile_half, adj_y)
+                                        ctx.lineTo(adj_x, adj_y + tile_hlf)
                                         ctx.closePath()
                                         ctx.fill()
                                     }
@@ -407,7 +427,7 @@
                                         const adj_x = ref_x + (x * tile_half) - (y * tile_half)
                                         const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
 
-                                        ctx.fillStyle = "#00aaaa"
+                                        ctx.fillStyle = "#9597A3"
                                         ctx.beginPath()
                                         ctx.moveTo(adj_x, adj_y + tile_hlf + (tile_size / 10))
                                         ctx.lineTo(adj_x + (tile_size / 10), adj_y + tile_hlf + (tile_size / 10) - 4)
@@ -416,7 +436,7 @@
                                         ctx.closePath()
                                         ctx.fill()
 
-                                        ctx.fillStyle = "#00cccc"
+                                        ctx.fillStyle = "#6F717A"
                                         ctx.beginPath()
                                         ctx.moveTo(adj_x, adj_y - (tile_half * 3))
                                         ctx.lineTo(adj_x + (tile_size / 10), adj_y - (tile_half * 3) - 4)
@@ -425,7 +445,7 @@
                                         ctx.closePath()
                                         ctx.fill()
 
-                                        ctx.fillStyle = "#00FFFF"
+                                        ctx.fillStyle = "#B6B8C7"
                                         ctx.beginPath()
                                         ctx.moveTo(adj_x - tile_half, adj_y)
                                         ctx.lineTo(adj_x, adj_y + tile_hlf)
