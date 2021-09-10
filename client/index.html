@@ -346,7 +346,7 @@
                             ctx.fillStyle = "#989865"
                             ctx.strokeStyle = "#8E8E5E"
                             const adj_x = ref_x + (x * tile_half) - (y * tile_half)
-                            const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
+                            const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf) - (room_model2[x] * (tile_size / 10))
                             ctx.beginPath()
                             ctx.moveTo(adj_x, adj_y - tile_hlf)
                             ctx.lineTo(adj_x + tile_half, adj_y)
@@ -391,6 +391,15 @@
                                         const adj_x = ref_x + (x * tile_half) - (y * tile_half)
                                         const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
 
+                                        ctx.fillStyle = "#90929E"
+                                        ctx.beginPath()
+                                        ctx.moveTo(adj_x, adj_y + tile_hlf + (tile_size / 10))
+                                        ctx.lineTo(adj_x + tile_half, adj_y + (tile_size / 10))
+                                        ctx.lineTo(adj_x + tile_half, adj_y - (tile_half * 3) - tile_hlf)
+                                        ctx.lineTo(adj_x, adj_y - (tile_half * 3))
+                                        ctx.closePath()
+                                        ctx.fill()
+
                                         ctx.fillStyle = "#BBBECD"
                                         ctx.beginPath()
                                         ctx.moveTo(adj_x, adj_y + tile_hlf + (tile_size / 10))
@@ -404,17 +413,8 @@
                                         ctx.beginPath()
                                         ctx.moveTo(adj_x, adj_y - (tile_half * 3))
                                         ctx.lineTo(adj_x - (tile_size / 10), adj_y - (tile_half * 3) - 4)
-                                        ctx.lineTo(adj_x + tile_half - (tile_size / 10), adj_y - (tile_half * 3) - tile_hlf - 4)
+                                        ctx.lineTo(adj_x + tile_half, adj_y - (tile_half * 3) - tile_hlf - 6.8)
                                         ctx.lineTo(adj_x + tile_half, adj_y - (tile_half * 3) - tile_hlf)
-                                        ctx.closePath()
-                                        ctx.fill()
-
-                                        ctx.fillStyle = "#90929E"
-                                        ctx.beginPath()
-                                        ctx.moveTo(adj_x, adj_y - (tile_half * 3))
-                                        ctx.lineTo(adj_x + tile_half, adj_y - (tile_half * 3) - tile_hlf)
-                                        ctx.lineTo(adj_x + tile_half, adj_y)
-                                        ctx.lineTo(adj_x, adj_y + tile_hlf)
                                         ctx.closePath()
                                         ctx.fill()
                                     }
@@ -427,6 +427,15 @@
                                         const adj_x = ref_x + (x * tile_half) - (y * tile_half)
                                         const adj_y = ref_y + (y * tile_hlf) + (x * tile_hlf)
 
+                                        ctx.fillStyle = "#6F717A"
+                                        ctx.beginPath()
+                                        ctx.moveTo(adj_x, adj_y - (tile_half * 3))
+                                        ctx.lineTo(adj_x + (tile_size / 10), adj_y - (tile_half * 3) - 4)
+                                        ctx.lineTo(adj_x - tile_half, adj_y - (tile_half * 3) - tile_hlf - 6.8)
+                                        ctx.lineTo(adj_x - tile_half, adj_y - (tile_half * 3) - tile_hlf)
+                                        ctx.closePath()
+                                        ctx.fill()
+                                        
                                         ctx.fillStyle = "#9597A3"
                                         ctx.beginPath()
                                         ctx.moveTo(adj_x, adj_y + tile_hlf + (tile_size / 10))
@@ -436,21 +445,12 @@
                                         ctx.closePath()
                                         ctx.fill()
 
-                                        ctx.fillStyle = "#6F717A"
-                                        ctx.beginPath()
-                                        ctx.moveTo(adj_x, adj_y - (tile_half * 3))
-                                        ctx.lineTo(adj_x + (tile_size / 10), adj_y - (tile_half * 3) - 4)
-                                        ctx.lineTo(adj_x - tile_half + (tile_size / 10), adj_y - tile_hlf - (tile_half * 3) - 4)
-                                        ctx.lineTo(adj_x - tile_half, adj_y - tile_hlf - (tile_half * 3))
-                                        ctx.closePath()
-                                        ctx.fill()
-
                                         ctx.fillStyle = "#B6B8C7"
                                         ctx.beginPath()
-                                        ctx.moveTo(adj_x - tile_half, adj_y)
-                                        ctx.lineTo(adj_x, adj_y + tile_hlf)
-                                        ctx.lineTo(adj_x, adj_y - (tile_half * 3))
+                                        ctx.moveTo(adj_x, adj_y + tile_hlf + (tile_size / 10))
+                                        ctx.lineTo(adj_x - tile_half, adj_y + (tile_size / 10))
                                         ctx.lineTo(adj_x - tile_half, adj_y - (tile_half * 3) - tile_hlf)
+                                        ctx.lineTo(adj_x, adj_y - (tile_half * 3))
                                         ctx.closePath()
                                         ctx.fill()
                                     }
